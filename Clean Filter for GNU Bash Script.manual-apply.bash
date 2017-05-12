@@ -64,7 +64,7 @@ init(){
 
 	declare -r temp_file_name=stdout.bash
 
-	"${RUNTIME_SCRIPT_DIRECTORY}"/clean-bash.bash <"${target_file}" >"${global_temp_directory}/${temp_file_name}"
+	"${RUNTIME_SCRIPT_DIRECTORY}/Clean Filter for GNU Bash Script.bash" <"${target_file}" >"${global_temp_directory}/${temp_file_name}"
 	cat "${global_temp_directory}/${temp_file_name}" >"${target_file}"
 
 	exit 0
