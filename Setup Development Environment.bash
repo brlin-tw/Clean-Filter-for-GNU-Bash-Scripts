@@ -710,7 +710,7 @@ init() {
 		|| true
 	rm "${SHC_PREFIX_DIR}/.git/index" >/dev/null \
 		&& git checkout HEAD -- "$(git rev-parse --show-toplevel)" >/dev/null
-	git stash pop &>/dev/null
+	git stash pop &>/dev/null\
 		|| true
 	printf "done.\n"
 
