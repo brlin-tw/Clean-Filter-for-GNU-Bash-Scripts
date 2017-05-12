@@ -687,7 +687,7 @@ init() {
 
 	printf "Setting Project-specific Git configuration..."
 	git config include.path ../.gitconfig\
-		&& printf "done"
+		&& printf "done\n"
 
 	printf "Setting Git Hooks..."
 	ln \
@@ -695,8 +695,8 @@ init() {
 		--verbose\
 		"${SDC_GIT_HOOKS_DIR}/Pre-commit Script.bash"\
 		"${SHC_PREFIX_DIR}/.git/hooks/pre-commit"\
-		&& printf "done"\
-		|| printf "failed"
+		&& printf "done\n"\
+		|| printf "failed\n"
 
 	printf "Fetching submodules.."
 	git submodule init\
