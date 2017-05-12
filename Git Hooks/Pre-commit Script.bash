@@ -36,10 +36,10 @@ declare global_temp_directory
 ## init function: program entrypoint
 init(){
 	check_runtime_dependencies
-	create_temp_directory
-	if [ "${?}" -ne "${COMMON_RESULT_SUCCESS}" ]; then
+
+	if ! create_temp_directory; then
 		printf "Error: Unable to create temporary directory.\n" 1>&2
-		exit "${COMMON_RESULT_FAILURE}"
+		exit "1"
 	fi
 
 	# Checkout all scripts from staging area to temp folder
@@ -58,29 +58,29 @@ init(){
 		printf "Checking %s...\n" "${file}"
 		shellcheck "${file}" || check_result="${?}"
 		if [ "${check_result}" -ne 0 ]; then
-			printf "%s: ERROR: ShellCheck failed, please check your script.\n" "${META_PROGRAM_NAME_OVERRIDE}" 1>&2
-			exit "${COMMON_RESULT_FAILURE}"
+			printf "%s: ERROR: ShellCheck failed, please check your script.\n" "${RUNTIME_EXECUTABLE_NAME}" 1>&2
+			exit "1"
 		fi
 	done < <(find . -name "*.bash" -print0) # this is a process substitution
 
 	popd >/dev/null
 
-	printf "%s: ShellCheck succeeded.\n" "${META_PROGRAM_NAME_OVERRIDE}"
+	printf "%s: ShellCheck succeeded.\n" "${RUNTIME_EXECUTABLE_NAME}"
 	exit 0
 }; declare -fr init
 
 create_temp_directory(){
-	if ! global_temp_directory="$(mktemp --directory --tmpdir "${META_APPLICATION_NAME}".XXXXXX.tmpdir)"; then
-		return "${COMMON_RESULT_FAILURE}"
+	if ! global_temp_directory="$(mktemp --directory --tmpdir "${RUNTIME_EXECUTABLE_NAME}".XXXXXX.tmpdir)"; then
+		return "1"
 	fi
-	return "${COMMON_RESULT_SUCCESS}"
+	return "0"
 }
 readonly -f create_temp_directory
 
 cleanUpBeforeNormalExit(){
 	rm -rf "${global_temp_directory}"\
 		|| printf "%s: Error: Failed to remove temp directory" "${RUNTIME_EXECUTABLE_NAME}" 1>&2
-	return "${COMMON_RESULT_SUCCESS}"
+	return "0"
 }
 declare -fr cleanUpBeforeNormalExit
 
@@ -99,7 +99,7 @@ check_runtime_dependencies(){
 		if ! command -v "${a_command}" &>/dev/null; then
 			printf "%s: %s: Error: Command %s not found, please check your runtime dependencies." \
 				"${RUNTIME_EXECUTABLE_NAME}" "${FUNCNAME[0]}" "${a_command}" 1>&2
-			exit "${COMMON_RESULT_FAILURE}"
+			exit "1"
 		fi
 	done
 }; declare -fr check_runtime_dependencies
