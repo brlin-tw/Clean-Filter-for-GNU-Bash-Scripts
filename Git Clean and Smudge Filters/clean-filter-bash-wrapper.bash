@@ -678,12 +678,7 @@ init() {
 		exit "${COMMON_RESULT_SUCCESS}"
 	fi
 
-	if [ ! meta_util_is_parameter_set_and_not_null SDC_SOURCE_CODE_DIR ]; then
-		printf "%s: Error: Unable to locate source code directory\n" "${RUNTIME_EXECUTABLE_NAME}" 1>&2
-		exit "${COMMON_RESULT_FAILURE}"
-	fi
-
-	declare filter_executable="${SDC_SOURCE_CODE_DIR}/Clean Filter for GNU Bash Script.bash"
+	declare filter_executable="${SHC_PREFIX_DIR}/Clean Filter for GNU Bash Script.bash"
 	if [ ! -x "${filter_executable}" ]; then
 		printf "%s: Error: Unable to locate clean filter or the clean filter is not executable\n" "${RUNTIME_EXECUTABLE_NAME}" 1>&2
 		exit "${COMMON_RESULT_FAILURE}"

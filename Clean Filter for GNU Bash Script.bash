@@ -72,26 +72,18 @@ init(){
 	# sed --in-place 's//@@VERSION@@"/' "${temp_file}"
 
 	# enforce coding style
-	# Scope of "Flexible Software Installation Specification" project
-	# shellcheck disable=SC1090
-	if ! source "${RUNTIME_SCRIPT_DIRECTORY}"/PATH_TO_SOFTWARE_INSTALLATION_PREFIX_DIRECTORY.source 2>/dev/null \
-		|| [ ! -v PATH_TO_SOFTWARE_INSTALLATION_PREFIX_DIRECTORY ]; then
-		printf -- "%s: Error: Unable to acquire installation prefix location\n" "${RUNTIME_SCRIPT_NAME}" 1>&2
-		exit 1
-	fi
-
-	SHC_PREFIX_DIR="${RUNTIME_SCRIPT_DIRECTORY}/${PATH_TO_SOFTWARE_INSTALLATION_PREFIX_DIRECTORY}"
+	SHC_PREFIX_DIR="${RUNTIME_SCRIPT_DIRECTORY}"
 	# Scope of "Flexible Software Installation Specification" project
 	# shellcheck disable=SC1090
 	if ! source "${SHC_PREFIX_DIR}"/SOFTWARE_DIRECTORY_CONFIGURATION.source 2>/dev/null\
-		|| [ ! -v SDC_THIRDPARTY_SOFTWARE_DIR ]; then
-		printf -- "%s: Error: Unable to acquire third-party software directory\n" "${RUNTIME_SCRIPT_NAME}" 1>&2
+		|| [ ! -v SDC_CODE_FORMATTERS_DIR ]; then
+		printf -- "%s: Error: Unable to acquire code formatters directory\n" "${RUNTIME_SCRIPT_NAME}" 1>&2
 		exit 1
 	fi
 
 	# Scope of "Flexible Software Installation Specification" project
 	# shellcheck disable=SC1090
-	if ! source "${SDC_THIRDPARTY_SOFTWARE_DIR}"/SOFTWARE_DIRECTORY_CONFIGURATION.source 2>/dev/null\
+	if ! source "${SDC_CODE_FORMATTERS_DIR}"/SOFTWARE_DIRECTORY_CONFIGURATION.source 2>/dev/null\
 		|| [ ! -v SDC_BASHBEAUTIFY_DIR ]; then
 		printf -- "%s: Error: Unable to acquire Bashbeautify directory\n" "${RUNTIME_SCRIPT_NAME}" 1>&2
 		exit 1
