@@ -1,0 +1,11 @@
+# Metadata of the application
+# ===========================
+# This is the configuration file that configures the metadata of the application
+#
+# https://github.com/Lin-Buo-Ren/Flexible-Software-Installation-Specification#application_metadatasource
+META_APPLICATION_NAME="用於 GNU Bash 腳本的清潔過濾器 / Clean Filter for GNU Bash Scripts"
+META_APPLICATION_DEVELOPER_NAME="林博仁"
+META_APPLICATION_LICENSE="GNU GPLv3+"
+META_APPLICATION_SITE_URL="https://github.com/Lin-Buo-Ren/Clean-Filter-for-GNU-Bash-Scripts"
+META_APPLICATION_ISSUE_TRACKER_URL="https://github.com/Lin-Buo-Ren/Clean-Filter-for-GNU-Bash-Scripts/issues"
+META_APPLICATION_SEEKING_HELP_OPTION="contact developer"
