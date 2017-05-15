@@ -1,4 +1,4 @@
 # Project-specific Git Configuration
 # Documentation: git-config manpage
 [filter "bash"]
-	clean = "\"Git Clean and Smudge Filters/clean-filter-bash-wrapper.bash\""
+	clean = "\"Clean Filter for GNU Bash Script.bash\""

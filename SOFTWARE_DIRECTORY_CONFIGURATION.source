@@ -8,4 +8,3 @@
 # SDC_TEMP_DIR="${SHC_PREFIX_DIR}/Temporary Files"
 SDC_CODE_FORMATTERS_DIR="${SHC_PREFIX_DIR}/Code Formatters and Beautifiers"
 SDC_GIT_HOOKS_DIR="${SHC_PREFIX_DIR}/Git Hooks"
-SDC_GIT_CLEAN_AND_SMUDGE_FILTERS_DIR="${SHC_PREFIX_DIR}/Git Clean and Smudge Filters"
