@@ -712,7 +712,7 @@ init() {
 			"${RUNTIME_EXECUTABLE_NAME}" 1>&2
 		exit 1
 	fi
-	declare -r precommit_hook_path="${SDC_GNU_BASH_GIT_PRECOMMIT_HOOK_DIR}/Pre-commit Script.bash"
+	declare -r precommit_hook_path="${SDC_GNU_BASH_GIT_PRECOMMIT_HOOK_DIR}/Git Pre-commit Hook for GNU Bash Projects.bash"
 	if [ ! -x "${precommit_hook_path}" ]; then
 		printf \
 			"\n%s: Error: Unable to locate the pre-commit hook"\
