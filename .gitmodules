@@ -1,11 +1,10 @@
-[submodule "Third-party Software/the Bash Script Beautifier(patched)"]
-	path = Code Formatters and Beautifiers/the Bash Script Beautifier(patched)
-	url = https://github.com/Lin-Buo-Ren/bashbeautify.git
-	branch = patch-tab-indentation-and-no-backup
-	ignore = untracked
-
 [submodule "Git Hooks/Git Pre-commit Hook for GNU Bash Projects"]
 	path = Git Hooks/Git Pre-commit Hook for GNU Bash Projects
 	url = https://github.com/Lin-Buo-Ren/Git_Pre-commit_Hook_for_GNU_Bash_Projects
+	fetchRecurseSubmodules = false
+	ignore = untracked
+[submodule "Code Formatters and Beautifiers/the Bash Script Beautifier"]
+	path = Code Formatters and Beautifiers/the Bash Script Beautifier
+	url = https://github.com/hermanbergwerf/bashbeautify.git
 	fetchRecurseSubmodules = false
 	ignore = untracked
