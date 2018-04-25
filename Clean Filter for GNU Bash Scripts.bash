@@ -32,14 +32,14 @@ declare -r RUNTIME_SCRIPT_PATH_RELATIVE="${0}"
 declare -r RUNTIME_COMMAND_BASE="${RUNTIME_COMMAND_BASE:-${0}}"
 
 trap_errexit(){
-	printf "An error occurred and the script is prematurely aborted\n" 1>&2
+	printf 'An error occurred and the script is prematurely aborted\n' 1>&2
 	return 0
 }; declare -fr trap_errexit; trap trap_errexit ERR
 
 trap_exit(){
-	printf "DEBUG: %s is leaving\n" "${RUNTIME_SCRIPT_NAME}" 1>&2
+	printf 'DEBUG: %s is leaving\n' "${RUNTIME_SCRIPT_NAME}" 1>&2
 	if ! rm "${temp_file}"; then
-		printf "%s: %s: Error: Unable to remove temporary file\n" "${RUNTIME_SCRIPT_NAME}" "${FUNCNAME[0]}" 1>&2
+		printf '%s: %s: Error: Unable to remove temporary file\n' "${RUNTIME_SCRIPT_NAME}" "${FUNCNAME[0]}" 1>&2
 		exit 1
 	fi
 	return 0
@@ -48,7 +48,7 @@ trap_exit(){
 check_runtime_dependencies(){
 	for a_command in sed python; do
 		if ! command -v "${a_command}" &>/dev/null; then
-			printf "ERROR: %s command not found.\n" "${a_command}" 1>&2
+			printf 'ERROR: %s command not found.\n' "${a_command}" 1>&2
 			return 1
 		fi
 	done
@@ -57,7 +57,7 @@ check_runtime_dependencies(){
 
 ## init function: program entrypoint
 init(){
-	printf "DEBUG: %s called\n" "${RUNTIME_SCRIPT_NAME}" 1>&2
+	printf 'DEBUG: %s called\n' "${RUNTIME_SCRIPT_NAME}" 1>&2
 	if ! check_runtime_dependencies; then
 		exit 1
 	fi
@@ -77,7 +77,7 @@ init(){
 	# shellcheck disable=SC1090
 	if ! source "${SHC_PREFIX_DIR}"/SOFTWARE_DIRECTORY_CONFIGURATION.source 2>/dev/null\
 		|| [ ! -v SDC_CODE_FORMATTERS_DIR ]; then
-		printf -- "%s: Error: Unable to acquire code formatters directory\n" "${RUNTIME_SCRIPT_NAME}" 1>&2
+		printf -- '%s: Error: Unable to acquire code formatters directory\n' "${RUNTIME_SCRIPT_NAME}" 1>&2
 		exit 1
 	fi
 
@@ -85,7 +85,7 @@ init(){
 	# shellcheck disable=SC1090
 	if ! source "${SDC_CODE_FORMATTERS_DIR}"/SOFTWARE_DIRECTORY_CONFIGURATION.source 2>/dev/null\
 		|| [ ! -v SDC_BASHBEAUTIFY_DIR ]; then
-		printf -- "%s: Error: Unable to acquire Bashbeautify directory\n" "${RUNTIME_SCRIPT_NAME}" 1>&2
+		printf -- '%s: Error: Unable to acquire Bashbeautify directory\n' "${RUNTIME_SCRIPT_NAME}" 1>&2
 		exit 1
 	fi
 
@@ -98,7 +98,7 @@ init(){
 	# dump temp_file to stdout
 	cat "${temp_file}"
 
-	printf "DEBUG: %s is done\n" "${RUNTIME_SCRIPT_NAME}" 1>&2
+	printf 'DEBUG: %s is done\n' "${RUNTIME_SCRIPT_NAME}" 1>&2
 	exit 0
 }; declare -fr init
 init "${@}"

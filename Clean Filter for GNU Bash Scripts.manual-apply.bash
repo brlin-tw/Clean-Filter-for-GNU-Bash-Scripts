@@ -27,7 +27,7 @@ readonly RUNTIME_SCRIPT_PATH_RELATIVE="${0}"
 readonly RUNTIME_COMMAND_BASE="${RUNTIME_COMMAND_BASE:-${0}}"
 
 trap_errexit(){
-	printf "An error occurred and the script is prematurely aborted\n" 1>&2
+	printf 'An error occurred and the script is prematurely aborted\n' 1>&2
 	return 0
 }; readonly -f trap_errexit; trap trap_errexit ERR
 
@@ -39,7 +39,7 @@ trap_exit(){
 check_runtime_dependencies(){
 	for a_command in cat mktemp mv; do
 		if ! command -v "${a_command}" &>/dev/null; then
-			printf "ERROR: %s command not found.\n" "${a_command}" 1>&2
+			printf 'ERROR: %s command not found.\n' "${a_command}" 1>&2
 			return 1
 		fi
 	done
@@ -56,7 +56,7 @@ init(){
 	declare -gr global_temp_directory
 
 	if [ "${#}" -ne 1 ]; then
-		printf "ERROR: Wrong command-line argument quantity.\n" 1>&2
+		printf 'ERROR: Wrong command-line argument quantity.\n' 1>&2
 		exit 1
 	fi
 
