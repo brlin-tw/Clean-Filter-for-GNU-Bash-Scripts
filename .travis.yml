@@ -6,6 +6,9 @@
 ## Use container-based infrastructure for quicker build start-up
 sudo: false
 
+git:
+  submodules: false
+
 addons:
   apt:
     packages:
