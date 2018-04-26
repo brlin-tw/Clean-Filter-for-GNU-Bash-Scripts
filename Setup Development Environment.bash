@@ -93,6 +93,11 @@ init() {
 	export GIT_DIR="${SHC_PREFIX_DIR}/.git"
 	export GIT_WORK_TREE="${SHC_PREFIX_DIR}"
 
+	printf 'Fetching submodules..'
+	git submodule update --init\
+		&& printf 'done\n'\
+		|| printf 'failed\n'
+
 	printf 'Setting Project-specific Git configuration...'
 	git config include.path ../.gitconfig\
 		&& printf 'done\n'
@@ -135,11 +140,6 @@ init() {
 		"${precommit_hook_path}"\
 		"${SHC_PREFIX_DIR}/.git/hooks/pre-commit"\
 		&& printf 'done\n'
-
-	printf 'Fetching submodules..'
-	git submodule update --init\
-		&& printf 'done\n'\
-		|| printf 'failed\n'
 
 	printf 'Activate Git smudge filter...\n'
 	declare -i result
