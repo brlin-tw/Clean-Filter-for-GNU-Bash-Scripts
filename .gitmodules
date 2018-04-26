@@ -1,10 +1,10 @@
 [submodule "Git Hooks/Git Pre-commit Hook for GNU Bash Projects"]
 	path = Git Hooks/Git Pre-commit Hook for GNU Bash Projects
 	url = https://github.com/Lin-Buo-Ren/Git_Pre-commit_Hook_for_GNU_Bash_Projects
-	fetchRecurseSubmodules = false
+	fetchRecurseSubmodules = no
 	ignore = untracked
 [submodule "Code Formatters and Beautifiers/the Bash Script Beautifier"]
 	path = Code Formatters and Beautifiers/the Bash Script Beautifier
 	url = https://github.com/hermanbergwerf/bashbeautify.git
-	fetchRecurseSubmodules = false
+	fetchRecurseSubmodules = no
 	ignore = untracked
