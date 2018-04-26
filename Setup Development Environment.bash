@@ -137,7 +137,7 @@ init() {
 		&& printf 'done\n'
 
 	printf 'Fetching submodules..'
-	git submodule update --init --recursive\
+	git submodule update --init\
 		&& printf 'done\n'\
 		|| printf 'failed\n'
 
