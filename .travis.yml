@@ -6,14 +6,6 @@
 ## Use container-based infrastructure for quicker build start-up
 sudo: false
 
-git:
-  submodules: false
-
-addons:
-  apt:
-    packages:
-    - realpath      # Merged to GNU Coreutils in Ubuntu 16.04
-
 ## We only support Ubuntu 14.04 and newer
 dist: trusty
 
@@ -24,7 +16,13 @@ language: bash
 ## https://docs.travis-ci.com/user/customizing-the-build/#Git-Clone-Depth
 ## > Please note that if you use a depth of 1 and have a queue of jobs, Travis CI won’t build commits that are in the queue when you push a new commit.
 git:
+  submodules: false
   depth: 1
+
+addons:
+  apt:
+    packages:
+    - realpath      # Merged to GNU Coreutils in Ubuntu 16.04
 
 install:
 - shellcheck --version
