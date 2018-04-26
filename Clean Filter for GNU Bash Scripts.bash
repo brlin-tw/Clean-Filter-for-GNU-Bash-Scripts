@@ -89,10 +89,10 @@ init(){
 		exit 1
 	fi
 
-	"${SDC_BASHBEAUTIFY_DIR}"/bashbeautify.py\
-		--tab-str '	'\
-		--tab-size 1\
-		--no-backup\
+	"${SDC_BASHBEAUTIFY_DIR}"/bashbeautify.py \
+		--tab-str '	' \
+		--tab-size 1 \
+		--no-backup \
 		"${temp_file}"
 
 	# dump temp_file to stdout
