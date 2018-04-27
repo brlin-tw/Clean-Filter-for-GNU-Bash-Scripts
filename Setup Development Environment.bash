@@ -94,19 +94,19 @@ init() {
 	export GIT_WORK_TREE="${SHC_PREFIX_DIR}"
 
 	printf 'Fetching submodules..'
-	git submodule update --init\
-		&& printf 'done\n'\
+	git submodule update --init \
+		&& printf 'done\n' \
 		|| printf 'failed\n'
 
 	printf 'Setting Project-specific Git configuration...'
-	git config include.path ../.gitconfig\
+	git config include.path ../.gitconfig \
 		&& printf 'done\n'
 
 	printf 'Setting Git Hooks...'
 	if [ ! -v SDC_GIT_HOOKS_DIR ] \
 		|| [ ! -n "${SDC_GIT_HOOKS_DIR}" ]; then
 		printf \
-			'\n%s: Error: Unable to locate git hooks directory'\
+			'\n%s: Error: Unable to locate git hooks directory' \
 			"${RUNTIME_EXECUTABLE_NAME}" 1>&2
 		exit 1
 	fi
@@ -114,21 +114,21 @@ init() {
 	# shellcheck disable=SC1090
 	if ! source "${SDC_GIT_HOOKS_DIR}/SOFTWARE_DIRECTORY_CONFIGURATION.source"; then
 		printf \
-			'\n%s: Error: Unable to locate submodule directory configuration'\
+			'\n%s: Error: Unable to locate submodule directory configuration' \
 			"${RUNTIME_EXECUTABLE_NAME}" 1>&2
 		exit 1
 	fi
 	if [ ! -v SDC_GNU_BASH_GIT_PRECOMMIT_HOOK_DIR ] \
 		|| [ ! -n "${SDC_GNU_BASH_GIT_PRECOMMIT_HOOK_DIR}" ]; then
 		printf \
-			'\n%s: Error: Unable to locate "Git Pre-commit Hook for GNU Bash Projects" directory'\
+			'\n%s: Error: Unable to locate "Git Pre-commit Hook for GNU Bash Projects" directory' \
 			"${RUNTIME_EXECUTABLE_NAME}" 1>&2
 		exit 1
 	fi
 	declare -r precommit_hook_path="${SDC_GNU_BASH_GIT_PRECOMMIT_HOOK_DIR}/Git Pre-commit Hook for GNU Bash Projects.bash"
 	if [ ! -x "${precommit_hook_path}" ]; then
 		printf \
-			'\n%s: Error: Unable to locate the pre-commit hook'\
+			'\n%s: Error: Unable to locate the pre-commit hook' \
 			"${RUNTIME_EXECUTABLE_NAME}" 1>&2
 		exit 1
 	fi
@@ -220,9 +220,9 @@ meta_trap_err_print_debugging_info(){
 	set +o xtrace
 
 	printf \
-		'ERROR: %s has encountered an error and is ending prematurely, %s for support.\n'\
-		"${META_PROGRAM_NAME_OVERRIDE:-${RUNTIME_EXECUTABLE_NAME:-This program}}"\
-		"${META_APPLICATION_SEEKING_HELP_OPTION:-contact developer}"\
+		'ERROR: %s has encountered an error and is ending prematurely, %s for support.\n' \
+		"${META_PROGRAM_NAME_OVERRIDE:-${RUNTIME_EXECUTABLE_NAME:-This program}}" \
+		"${META_APPLICATION_SEEKING_HELP_OPTION:-contact developer}" \
 		1>&2
 
 	printf '\n' # Separate paragraphs
@@ -239,10 +239,10 @@ meta_trap_err_print_debugging_info(){
 		((level = level +1))
 	done
 	declare -i counter=0; while [ "${level}" -lt "${#FUNCNAME[@]}" ]; do
-		printf '	%u. %s(%s:%u)\n'\
-			"${counter}"\
-			"${FUNCNAME[${level}]}"\
-			"${BASH_SOURCE[${level}]}"\
+		printf '	%u. %s(%s:%u)\n' \
+			"${counter}" \
+			"${FUNCNAME[${level}]}" \
+			"${BASH_SOURCE[${level}]}" \
 			"${BASH_LINENO[((${level} - 1))]}"
 		((level = level + 1))
 		((counter = counter +1))
@@ -408,8 +408,8 @@ meta_trap_exit(){
 #### Temporarily disable errexit
 meta_workaround_errexit_setup() {
 	if [ ! -v meta_setup_traps_called ]; then
-		printf '%s: %s: Error: This function requires meta_setup_traps to be called beforehand.\n'\
-			"${GBSS_NAME}"\
+		printf '%s: %s: Error: This function requires meta_setup_traps to be called beforehand.\n' \
+			"${GBSS_NAME}" \
 			"${FUNCNAME[0]}"
 		exit "${COMMON_RESULT_FAILURE}"
 	fi
@@ -565,10 +565,10 @@ meta_fsis_setup_runtime_parameters(){
 meta_fsis_setup_software_directories_configuration(){
 	# Run guard
 	if [ ! -v meta_fsis_setup_runtime_parameters_called ]; then
-		printf '%s: %s: %u: Error: This function cannot be called before meta_fsis_setup_runtime_parameters, please contact developer.\n'\
-			"${GBSS_NAME}"\
-			"${FUNCNAME[0]}"\
-			"${LINENO}"\
+		printf '%s: %s: %u: Error: This function cannot be called before meta_fsis_setup_runtime_parameters, please contact developer.\n' \
+			"${GBSS_NAME}" \
+			"${FUNCNAME[0]}" \
+			"${LINENO}" \
 			1>&2
 		exit "${COMMON_RESULT_FAILURE}"
 	fi
@@ -672,10 +672,10 @@ meta_fsis_setup_software_directories_configuration(){
 meta_fsis_setup_application_metadata(){
 	# Run guard
 	if [ ! -v meta_fsis_setup_software_directories_configuration_called ]; then
-		printf '%s: %s: %u: Error: This function cannot be called before meta_fsis_setup_software_directories_configuration_called, please contact developer.\n'\
-			"${GBSS_NAME}"\
-			"${FUNCNAME[0]}"\
-			"${LINENO}"\
+		printf '%s: %s: %u: Error: This function cannot be called before meta_fsis_setup_software_directories_configuration_called, please contact developer.\n' \
+			"${GBSS_NAME}" \
+			"${FUNCNAME[0]}" \
+			"${LINENO}" \
 			1>&2
 		exit "${COMMON_RESULT_FAILURE}"
 	fi
