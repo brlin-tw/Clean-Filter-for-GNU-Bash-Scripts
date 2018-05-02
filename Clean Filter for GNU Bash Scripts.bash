@@ -86,8 +86,8 @@ init(){
 			cleaner \
 			flag_converter_mode \
 			input_files; then
-		printf --\
-			'Error: Invalid command-line parameters.\n'\
+		printf -- \
+			'Error: Invalid command-line parameters.\n' \
 			1>&2
 
 		# separate error message and help message
