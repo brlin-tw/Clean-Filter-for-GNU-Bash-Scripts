@@ -77,8 +77,8 @@ declare converter_intermediate_file
 ## This function is called near the end of the file,
 ## with the script's command-line parameters as arguments
 init(){
-	local cleaner=bashbeautify
-	local cleaner_basecommand='bashbeautify.py'
+	local cleaner=beautysh
+	local cleaner_basecommand='beautysh'
 	local flag_converter_mode=false
 	local -a input_files=()
 
@@ -180,7 +180,7 @@ print_help(){
 		printf 'Enable debug mode\n\n'
 
 		printf '### `--cleaner` / `-c` <name> ###\n'
-		printf 'Select cleaner: `bashbeautify`(default)\n\n'
+		printf 'Select cleaner: `beautysh`(default), `bashbeautify`\n\n'
 
 		printf '### `--converter` / `-C` ###\n'
 		printf 'Operate in converter mode instead of filter mode, accept non-option arguments as input files\n\n'
@@ -283,7 +283,8 @@ process_commandline_arguments() {
 	fi
 
 	case "${cleaner_ref}" in
-		bashbeautify)
+		bashbeautify\
+		|beautysh)
 			:
 			;;
 		*)
@@ -319,6 +320,9 @@ check_optional_dependencies(){
 			source "${SDC_CODE_FORMATTERS_DIR}/SOFTWARE_DIRECTORY_CONFIGURATION.source"
 			cleaner_basecommand_ref="${SDC_BASHBEAUTIFY_DIR}/bashbeautify.py"
 			;;
+		beautysh)
+			cleaner_basecommand_ref='beautysh'
+			;;
 		*)
 			printf -- \
 				"%s: FATAL: Shouldn't be here, report bug.\\n" \
@@ -343,7 +347,11 @@ pass_over_filter(){
 				--tab-str '	' \
 				--tab-size 1 \
 				- # stdin
-			return 0
+			;;
+		beautysh)
+			"${cleaner_basecommand}" \
+				--tab \
+				--files - # stdin
 			;;
 		*)
 			printf -- \
@@ -354,6 +362,7 @@ pass_over_filter(){
 			return 1
 			;;
 	esac
+	return 0
 }; declare -fr pass_over_filter
 
 ## Traps: Functions that are triggered when certain condition occurred
