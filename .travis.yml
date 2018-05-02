@@ -28,8 +28,8 @@ install:
 - shellcheck --version
 
 before_script:
-- git submodule init
-- git submodule update --depth=1 "Linters/GNU Bash Automatic Checking Program for Git Projects"
+- git submodule init 'Linters/GNU Bash Automatic Checking Program for Git Projects'
+- git submodule update --depth=30
 
 script:
 - ./"Linters/GNU Bash Automatic Checking Program for Git Projects/GNU Bash Automatic Checking Program for Git Projects.bash"
