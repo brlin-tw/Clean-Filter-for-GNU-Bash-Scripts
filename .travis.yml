@@ -41,7 +41,7 @@ script:
 
 cache:
   directories:
-    - $HOME/Software
+  - $HOME/Software
 
 matrix:
   fast_finish: true
