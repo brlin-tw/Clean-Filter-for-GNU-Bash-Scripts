@@ -29,7 +29,7 @@ before_install:
 - git submodule update --depth=30
 
 install:
-- ./"Setup ShellCheck's Latest Release without Re-building.bash"
+- ./"Continuous Integration/Utilities for Travis CI/Setup ShellCheck's Latest Release without Re-building.bash"
 - PATH="${HOME}/Software/shellcheck-stable:${PATH}"
 - which -a shellcheck
 - shellcheck --version
