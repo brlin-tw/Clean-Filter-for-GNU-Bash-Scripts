@@ -180,7 +180,7 @@ print_help(){
 		printf 'Enable debug mode\n\n'
 
 		printf '### `--cleaner` / `-c` <name> ###\n'
-		printf 'Select cleaner: `beautysh`(default), `bashbeautify`\n\n'
+		printf 'Select cleaner: `beautysh`(default), `shfmt`, `bashbeautify`\n\n'
 
 		printf '### `--converter` / `-C` ###\n'
 		printf 'Operate in converter mode instead of filter mode, accept non-option arguments as input files\n\n'
@@ -284,7 +284,8 @@ process_commandline_arguments() {
 
 	case "${cleaner_ref}" in
 		bashbeautify\
-		|beautysh)
+		|beautysh\
+		|shfmt)
 			:
 			;;
 		*)
@@ -323,6 +324,9 @@ check_optional_dependencies(){
 		beautysh)
 			cleaner_basecommand_ref='beautysh'
 			;;
+		shfmt)
+			cleaner_basecommand_ref='shfmt'
+			;;
 		*)
 			printf -- \
 				"%s: FATAL: Shouldn't be here, report bug.\\n" \
@@ -352,6 +356,11 @@ pass_over_filter(){
 			"${cleaner_basecommand}" \
 				--tab \
 				--files - # stdin
+			;;
+		shfmt)
+			"${cleaner_basecommand}" \
+				-bn \
+				-ci
 			;;
 		*)
 			printf -- \
