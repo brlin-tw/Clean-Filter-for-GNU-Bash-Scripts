@@ -68,6 +68,7 @@ declare -Ar META_RUNTIME_DEPENDENCIES=(
 	["git"]="Git"
 	["rm"]="${META_RUNTIME_DEPENDENCIES_DESCRIPTION_GNU_COREUTILS}"
 	["ln"]="${META_RUNTIME_DEPENDENCIES_DESCRIPTION_GNU_COREUTILS}"
+	[pre-commit]='pre-commit framework(https://pre-commit.com/)'
 )
 
 ## #################### End of META_RUNTIME_DEPENDENCIES ######################
@@ -102,44 +103,8 @@ init() {
 	git config include.path ../.gitconfig \
 		&& printf 'done\n'
 
-	printf 'Setting Git Hooks...'
-	if [ ! -v SDC_GIT_HOOKS_DIR ] \
-		|| [ ! -n "${SDC_GIT_HOOKS_DIR}" ]; then
-		printf \
-			'\n%s: Error: Unable to locate git hooks directory' \
-			"${RUNTIME_EXECUTABLE_NAME}" 1>&2
-		exit 1
-	fi
-	# Scope of "Flexible Software Installation Specification"
-	# shellcheck disable=SC1090
-	if ! source "${SDC_GIT_HOOKS_DIR}/SOFTWARE_DIRECTORY_CONFIGURATION.source"; then
-		printf \
-			'\n%s: Error: Unable to locate submodule directory configuration' \
-			"${RUNTIME_EXECUTABLE_NAME}" 1>&2
-		exit 1
-	fi
-	if [ ! -v SDC_GNU_BASH_GIT_PRECOMMIT_HOOK_DIR ] \
-		|| [ ! -n "${SDC_GNU_BASH_GIT_PRECOMMIT_HOOK_DIR}" ]; then
-		printf \
-			'\n%s: Error: Unable to locate "Git Pre-commit Hook for GNU Bash Projects" directory' \
-			"${RUNTIME_EXECUTABLE_NAME}" 1>&2
-		exit 1
-	fi
-	declare -r precommit_hook_path="${SDC_GNU_BASH_GIT_PRECOMMIT_HOOK_DIR}/Git Pre-commit Hook for GNU Bash Projects.bash"
-	if [ ! -x "${precommit_hook_path}" ]; then
-		printf \
-			'\n%s: Error: Unable to locate the pre-commit hook' \
-			"${RUNTIME_EXECUTABLE_NAME}" 1>&2
-		exit 1
-	fi
-	ln \
-		--symbolic\
-		--relative\
-		--force\
-		--verbose\
-		"${precommit_hook_path}"\
-		"${SHC_PREFIX_DIR}/.git/hooks/pre-commit"\
-		&& printf 'done\n'
+	printf -- 'Setting up pre-commit framework...'
+	pre-commit install
 
 	printf 'Activate Git smudge filter...\n'
 	declare -i result
@@ -865,7 +830,7 @@ meta_fsis_setup_application_metadata
 
 ## This script is based on the GNU Bash Shell Script Template project
 ## https://github.com/Lin-Buo-Ren/GNU-Bash-Shell-Script-Template
-## and is based on the following version: 
+## and is based on the following version:
 ## GNU_BASH_SHELL_SCRIPT_TEMPLATE_VERSION=@@GBSST_VERSION@@
 ## You may rebase your script to incorporate new features and fixes from the template
 
