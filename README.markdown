@@ -8,4 +8,6 @@ This project implements a clean filter for cleaning a GNU Bash script.  It suppo
 GNU Public License v3+ 
 
 ## 如何使用本應用<br>How to use this application
-This application is typically used as a Git submodule, add it and set up your Git configuration(git-config manpage) and Git path attribute(gitattributes manpage) settings to make it effective
+This application is typically used as a Git submodule, add it and set up your Git configuration(git-config manpage) and Git path attribute(gitattributes manpage) settings to make it effective.
+
+Run `./filter.bash --help` to checkout filter's supported command-line options and arguments.
