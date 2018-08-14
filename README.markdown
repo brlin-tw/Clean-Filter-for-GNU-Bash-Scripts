@@ -1,6 +1,6 @@
 # 用於 GNU Bash 腳本的清潔過濾器<br>Clean Filter for GNU Bash Scripts
 [![Build status of latest revision of the project](https://travis-ci.org/Lin-Buo-Ren/Clean-Filter-for-GNU-Bash-Scripts.svg?branch=master)](https://travis-ci.org/Lin-Buo-Ren/Clean-Filter-for-GNU-Bash-Scripts)   
-This project implements a clean filter for cleaning a GNU Bash script.  Currently all it does is to beautify the script using [the Bash Script Beautifier](https://github.com/hermanbergwerf/bashbeautify)
+This project implements a clean filter for cleaning a GNU Bash script.  It supports [the Bash Script Beautifier](https://github.com/hermanbergwerf/bashbeautify), [Beautysh](https://github.com/bemeurer/beautysh), and [shfmt](https://github.com/mvdan/sh#shfmt).
 
 <https://github.com/Lin-Buo-Ren/Clean-Filter-for-GNU-Bash-Scripts>
 
