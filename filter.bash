@@ -78,8 +78,8 @@ declare converter_intermediate_file
 ## This function is called near the end of the file,
 ## with the script's command-line parameters as arguments
 init(){
-	local cleaner=beautysh
-	local cleaner_basecommand='beautysh'
+	local cleaner=bashbeautify
+	local cleaner_basecommand=uninitialized
 	local flag_converter_mode=false
 	local -a input_files=()
 
