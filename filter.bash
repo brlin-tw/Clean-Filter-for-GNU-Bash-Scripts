@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 declare -r APPLICATION_NAME='Clean Filter for GNU Bash Scripts'
-# 林博仁 © 2017, 2018
+# 林博仁 © 2019
 
 # NOTE: ALWAYS PRINT MESSAGES TO STDERR as output to stdout will contaminate the input files when the program is operate in filter mode.
 
@@ -103,7 +103,7 @@ init(){
 		cleaner_basecommand \
 		"${RUNTIME_EXECUTABLE_DIRECTORY}"; then
 		printf -- \
-			'Error: Unable to locate the cleaner.  Please ensure that the selected cleaner is installed and its executable path is in the executable search PATHs.\n' \
+			'Error: Optional dependencies not satisfied, the program cannot continue.\n' \
 			1>&2
 		exit 1
 	fi
@@ -330,13 +330,20 @@ check_optional_dependencies(){
 			;;
 		*)
 			printf -- \
-				"%s: FATAL: Shouldn't be here, report bug.\\n" \
+				'%s: Error: Cleaner "%s" is not supported.\n' \
 				"${FUNCNAME[0]}" \
+				"${cleaner}" \
 				1>&2
+				return 2
 			;;
 	esac
 
 	if ! command -v "${cleaner_basecommand_ref}" 1>/dev/null 2>&1; then
+		printf -- \
+			'%s: Error: Cleaner command "%s" is not found in your command search PATHs.\n' \
+			"${FUNCNAME[0]}" \
+			"${cleaner_basecommand_ref}" \
+			1>&2
 		return 1
 	fi
 	return 0
