@@ -4,6 +4,13 @@ This project implements a clean filter for cleaning a GNU Bash script.  It suppo
 
 <https://github.com/Lin-Buo-Ren/Clean-Filter-for-GNU-Bash-Scripts>
 
+## Obsoletion notice
+It is determined that the attempt to make a universal script that supports multiple cleaners is not feasible,  and thus this project is obsoleted.
+
+It is recommended that you directly call and use these cleaners instead.
+
+Cheers!
+
 ## 智慧財產授權條款<br>Intellectual Property License
 GNU Public License v3+ 
 
