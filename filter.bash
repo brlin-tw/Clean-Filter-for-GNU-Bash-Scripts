@@ -80,13 +80,20 @@ declare converter_intermediate_file
 init(){
 	local cleaner=bashbeautify
 	local cleaner_basecommand=uninitialized
+	# Referenced indirectly, false positive
+	# shellcheck disable=SC2034
+	local -a cleaner_command_arguments=()
 	local flag_converter_mode=false
+	local indentation_style=spaces
+	local -i indentation_space_width=4
 	local -a input_files=()
 
 	if ! process_commandline_arguments \
 			cleaner \
 			flag_converter_mode \
-			input_files; then
+			input_files \
+			indentation_style \
+			indentation_space_width; then
 		printf -- \
 			'Error: Invalid command-line parameters.\n' \
 			1>&2
@@ -101,6 +108,9 @@ init(){
 	if ! check_optional_dependencies \
 		"${cleaner}" \
 		cleaner_basecommand \
+		cleaner_command_arguments \
+		"${indentation_style}" \
+		"${indentation_space_width}" \
 		"${RUNTIME_EXECUTABLE_DIRECTORY}"; then
 		printf -- \
 			'Error: Optional dependencies not satisfied, the program cannot continue.\n' \
@@ -117,7 +127,8 @@ init(){
 				1>&2
 			pass_over_filter\
 				"${cleaner}" \
-				"${cleaner_basecommand}"
+				"${cleaner_basecommand}" \
+				cleaner_command_arguments
 			;;
 		true)
 			converter_intermediate_file="$(
@@ -136,6 +147,7 @@ init(){
 				pass_over_filter \
 					"${cleaner}" \
 					"${cleaner_basecommand}" \
+					cleaner_command_arguments \
 					<"${input_file}" \
 					>"${converter_intermediate_file}"
 				cp \
@@ -186,6 +198,12 @@ print_help(){
 		printf '### `--converter` / `-C` ###\n'
 		printf 'Operate in converter mode instead of filter mode, accept non-option arguments as input files\n\n'
 
+		printf '### `--indentation-style` ###\n'
+		printf 'Specify style: `tabs`, `spaces`\n\n'
+
+		printf '### `--indentation-spaces-width` ###\n'
+		printf 'How many spaces comprises one level of indentation?  Default: 4\n\n'
+
 		printf '### `--` ###\n'
 		printf 'Signals that further command-line arguments are all input files\n\n'
 	} 1>&2
@@ -196,7 +214,11 @@ print_help(){
 process_commandline_arguments() {
 	local -n cleaner_ref="${1}"; shift
 	local -n flag_converter_mode_ref="${1}"; shift
-	local -n input_files_ref="${1}"
+	local -n input_files_ref="${1}"; shift
+	local -n indentation_style_ref="${1}"; shift
+	# Indirect reference
+	# shellcheck disable=SC2034
+	local -n indentation_space_width_ref="${1}"
 
 	if [ "${#RUNTIME_COMMANDLINE_ARGUMENTS[@]}" -eq 0 ]; then
 		return 0
@@ -207,6 +229,10 @@ process_commandline_arguments() {
 
 	# Normally we won't want debug traces to appear during parameter parsing, so we add this flag and defer its activation till returning(Y: Do debug)
 	local enable_debug=N
+
+	local \
+		flag_indentation_style_specified=false \
+		flag_indentation_space_width_specified=false
 
 	while true; do
 		if [ "${#parameters[@]}" -eq 0 ]; then
@@ -242,6 +268,60 @@ process_commandline_arguments() {
 				|-C)
 					flag_converter_mode_ref=true
 					;;
+				--indentation-style*)
+					flag_indentation_style_specified=true
+					if test "${parameters[0]}" = --indentation-style; then
+						if test "${#parameters[@]}" -eq 1; then
+							printf -- \
+								'%s: Error: %s option requires one argument!\n' \
+								"${FUNCNAME[0]}" \
+								"${parameters[0]}" \
+								1>&2
+							return 1
+						fi
+						indentation_style_ref="${parameters[1]}"
+						# shift array by 1 = unset 1st then repack
+						unset 'parameters[0]'
+						if [ "${#parameters[@]}" -ne 0 ]; then
+							parameters=("${parameters[@]}")
+						fi
+					else
+						indentation_style_ref="$(
+							cut \
+								--delimiter== \
+								--fields=2 \
+								<<< "${parameters[0]}"
+						)"
+					fi
+					;;
+				--indentation-space-width*)
+					flag_indentation_space_width_specified=true
+					if test "${parameters[0]}" = --indentation-space-width; then
+						if test "${#parameters[@]}" -eq 1; then
+							printf -- \
+								'%s: Error: %s option requires one argument!\n' \
+								"${FUNCNAME[0]}" \
+								"${parameters[0]}" \
+								1>&2
+							return 1
+						fi
+						indentation_space_width_ref="${parameters[1]}"
+						# shift array by 1 = unset 1st then repack
+						unset 'parameters[0]'
+						if [ "${#parameters[@]}" -ne 0 ]; then
+							parameters=("${parameters[@]}")
+						fi
+					else
+						# Indirectly referenced
+						# shellcheck disable=SC2034
+						indentation_space_width_ref="$(
+							cut \
+								--delimiter== \
+								--fields=2 \
+								<<< "${parameters[0]}"
+						)"
+					fi
+					;;
 				--)
 					# shift array by 1 = unset 1st then repack
 					unset 'parameters[0]'
@@ -266,6 +346,25 @@ process_commandline_arguments() {
 			fi
 		fi
 	done
+
+	if test "${flag_indentation_style_specified}" = true \
+		&& test "${flag_indentation_space_width_specified}" = true \
+		&& test "${indentation_style_ref}" != spaces; then
+		printf -- \
+			'%s: Error: --indentation-space-width option can only specified if --indentation-style is spaces\n' \
+			"${FUNCNAME[0]}" \
+			1>&2
+		return 1
+	fi
+
+	if test "${indentation_style_ref}" != spaces \
+		&& test "${indentation_style_ref}" != tabs; then
+		printf -- \
+			'%s: Error: Invalid --indentation-style argument.\n' \
+			"${FUNCNAME[@]}" \
+			1>&2
+		return 1
+	fi
 
 	if [ "${flag_converter_mode_ref}" = false ] && [ "${#input_files_ref[@]}" -ne 0 ]; then
 		printf -- \
@@ -308,6 +407,9 @@ process_commandline_arguments() {
 check_optional_dependencies(){
 	local -r cleaner="${1}"; shift
 	local -n cleaner_basecommand_ref="${1}"; shift
+	local -n cleaner_command_arguments_ref="${1}"; shift
+	local -r indentation_style="${1}"; shift
+	local -ir indentation_space_width="${1}"; shift
 	local -r runtime_executable_directory="${1}"
 
 	case "${cleaner}" in
@@ -321,12 +423,53 @@ check_optional_dependencies(){
 			# shellcheck source=/dev/null
 			source "${SDC_CODE_FORMATTERS_DIR}/SOFTWARE_DIRECTORY_CONFIGURATION.source"
 			cleaner_basecommand_ref="${SDC_BASHBEAUTIFY_DIR}/bashbeautify.py"
+			case "${indentation_style}" in
+				spaces)
+					cleaner_command_arguments_ref+=(--tab-str ' ')
+					cleaner_command_arguments_ref+=(--tab-size "${indentation_space_width}")
+				;;
+				tabs)
+					cleaner_command_arguments_ref+=(--tab-str $'\t')
+					cleaner_command_arguments_ref+=(--tab-size 1)
+				;;
+				*)
+					return 1
+				;;
+			esac
+			# stdin
+			cleaner_command_arguments_ref+=(-)
 			;;
 		beautysh)
 			cleaner_basecommand_ref='beautysh'
+			case "${indentation_style}" in
+				spaces)
+					cleaner_command_arguments_ref+=(--indent-size "${indentation_space_width}")
+				;;
+				tabs)
+					cleaner_command_arguments_ref+=(--tab)
+				;;
+				*)
+					return 1
+				;;
+			esac
+			# stdin
+			cleaner_command_arguments_ref+=(--files -)
 			;;
 		shfmt)
 			cleaner_basecommand_ref='shfmt'
+			case "${indentation_style}" in
+				spaces)
+					cleaner_command_arguments_ref+=(-i "${indentation_space_width}")
+				;;
+				tabs)
+					cleaner_command_arguments_ref+=(-i 0)
+				;;
+				*)
+					return 1
+				;;
+			esac
+			# FIXME: Style not customizable
+			cleaner_command_arguments_ref+=(-bn -ci)
 			;;
 		*)
 			printf -- \
@@ -351,34 +494,14 @@ check_optional_dependencies(){
 
 pass_over_filter(){
 	local -r cleaner="${1}"; shift
-	local -r cleaner_basecommand="${1}"
+	local -r cleaner_basecommand="${1}"; shift
+	# This is a name reference assignment, false positive
+	# shellcheck disable=SC2178
+	local -n cleaner_command_arguments_ref="${1}"
 
-	case "${cleaner}" in
-		bashbeautify)
-			"${cleaner_basecommand}" \
-				--tab-str '	' \
-				--tab-size 1 \
-				- # stdin
-			;;
-		beautysh)
-			"${cleaner_basecommand}" \
-				--tab \
-				--files - # stdin
-			;;
-		shfmt)
-			"${cleaner_basecommand}" \
-				-bn \
-				-ci
-			;;
-		*)
-			printf -- \
-				'%s: Error: Unsupported cleaner "%s".\n' \
-				"${FUNCNAME[0]}" \
-				"${cleaner}" \
-				1>&2
-			return 1
-			;;
-	esac
+	"${cleaner_basecommand}" \
+		"${cleaner_command_arguments_ref[@]}"
+
 	return 0
 }; declare -fr pass_over_filter
 
